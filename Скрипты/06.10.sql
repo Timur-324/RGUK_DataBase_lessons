@@ -53,18 +53,18 @@ select sum(price) / count(ticket_no)
 from segments as s ;
 
 
-SELECT
-    COUNT(*) AS row_count,
-    SUM(price) AS total_price,
-    AVG(price) AS average_price,
-    MIN(price) AS minimum_price,
-    MAX(price) AS maximum_price
-FROM bookings.segments
-WHERE FALSE;
+-- SELECT
+--     COUNT(*) AS row_count,
+--     SUM(price) AS total_price,
+--     AVG(price) AS average_price,
+--     MIN(price) AS minimum_price,
+--     MAX(price) AS maximum_price
+-- FROM bookings.segments
+-- WHERE FALSE;
 
-SELECT COALESCE(SUM(price), 1) AS total_price
-FROM bookings.segments
-WHERE FALSE;
+-- SELECT COALESCE(SUM(price), 1) AS total_price
+-- FROM bookings.segments
+-- WHERE FALSE;
 
 SELECT
     book_ref,
@@ -137,24 +137,24 @@ WHERE price >= 20000
 GROUP BY fare_conditions;
 
 
-a
-SELECT
-    fare_conditions,
-    AVG(price) AS average_price
-FROM bookings.segments
-GROUP BY fare_conditions
-HAVING AVG(price) >= 2000;
+-- a
+-- SELECT
+--     fare_conditions,
+--     AVG(price) AS average_price
+-- FROM bookings.segments
+-- GROUP BY fare_conditions
+-- HAVING AVG(price) >= 2000;
 
 
 
-SELECT
-    fare_conditions,
-    COUNT(*) AS segment_count,
-    ROUND(AVG(price), 2) AS average_price
-FROM bookings.segments
-WHERE price >= 10000
-GROUP BY fare_conditions
-HAVING COUNT(*) >= 100
-ORDER BY average_price DESC
-LIMIT 2;
+-- SELECT
+--     fare_conditions,
+--     COUNT(*) AS segment_count,
+--     ROUND(AVG(price), 2) AS average_price
+-- FROM bookings.segments
+-- WHERE price >= 10000
+-- GROUP BY fare_conditions
+-- HAVING COUNT(*) >= 100
+-- ORDER BY average_price DESC
+-- LIMIT 2;
 
