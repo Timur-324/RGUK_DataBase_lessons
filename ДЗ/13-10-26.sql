@@ -152,6 +152,25 @@ GROUP BY fare_conditions
 ORDER BY fare_conditions;
 
 
+-- 11
+select 
+ 	flight_id,
+ 	COUNT(*) as segments_count
+ from segments
+ group by flight_id 
+ having count(*) > 100
+ order by segments_count desc;
+
+-- 12
+select
+	passenger_id,
+	passenger_name,
+	count(*) as seg_count,
+	count(distinct fare_conditions) as cond_count
+from tickets as t
+join segments as s on t.ticket_no = s.ticket_no
+group by passenger_id, passenger_name having count(distinct fare_conditions) > 1;
+
 
 
 
@@ -174,23 +193,3 @@ from flights f
 group by status
 order by flight_count desc;
  
-
--- 11
-select 
- 	flight_id,
- 	COUNT(*) as segments_count
- from segments
- group by flight_id 
- having count(*) > 100
- order by segments_count desc;
-
--- 12
-select
-	passenger_id,
-	passenger_name,
-	count(*) as seg_count,
-	count(distinct fare_conditions) as cond_count
-from tickets as t
-join segments as s on t.ticket_no = s.ticket_no
-group by passenger_id, passenger_name having count(distinct fare_conditions) > 1;
-
