@@ -1,3 +1,7 @@
+-- Блок 1. Основы создания функций на SQL
+
+-- Задание 1. get_airports_count(): общее количество аэропортов, без параметров.
+-- COUNT(*) возвращает bigint, это же значение возвращает функция.
 CREATE OR REPLACE FUNCTION get_airports_count()
 RETURNS int
 LANGUAGE SQL
@@ -8,6 +12,8 @@ $$;
 SELECT get_airports_count();
 SELECT COUNT(*) FROM bookings.airports;
 
+-- Задание 2. get_bookings_amount(p_book_ref): стоимость брони по её номеру.
+-- Если брони нет, возвращается NULL, а не 0.
 create or replace function get_bookings_amount(
 p_book_ref text)
 returns numeric
@@ -22,6 +28,8 @@ select get_bookings_amount('3ZY3O5');
 select book_ref, get_bookings_amount(book_ref) from bookings;
 
 
+-- Задание 3. count_flights(p_status): число рейсов с указанным статусом.
+-- При отсутствии таких рейсов COUNT(*) вернёт 0.
 CREATE OR REPLACE FUNCTION count_flights(
 p_status text
 )
@@ -35,6 +43,8 @@ $$;
 SELECT count_flights('Arrived');
 
 
+-- Задание 5. count_flight_passengers(p_flight_id): число уникальных пассажиров рейса.
+-- Уникальность считается по passenger_id через segments JOIN tickets.
 create or replace function count_flight_passengers(p_flight_id int)
 returns int 
 language sql
@@ -49,6 +59,8 @@ SELECT count_flight_passengers(
 (SELECT flight_id FROM bookings.segments LIMIT 1)
 );
 
+-- Задание 6. get_airports_by_country(p_country): аэропорты указанной страны.
+-- Табличная функция возвращает код аэропорта, название и город.
 create or replace function get_airports_by_country(p_country text)
 RETURNS TABLE (
 airport_code text,
@@ -66,7 +78,10 @@ SELECT * FROM get_airports_by_country(
 (SELECT country FROM bookings.airports LIMIT 1)
 );
 
--- Block 2/Task 7.1
+-- Блок 2. Функции, возвращающие наборы данных
+
+-- Задание 7.1. get_booking_tickets(p_book_ref): все билеты бронирования.
+-- Возвращает полные записи bookings.tickets (RETURNS SETOF).
 CREATE OR REPLACE FUNCTION get_booking_tickets(
 p_book_ref text)
 RETURNS SETOF 
@@ -77,10 +92,11 @@ AS $$
 	FROM tickets AS t
 	WHERE t.book_ref::text = p_book_ref;
 $$;
--- testing
+-- Проверка:
 SELECT get_booking_tickets('RBUUIQ');
 
--- Block 2/Task 7.2
+-- Задание 7.2. get_booking_passengers(p_book_ref): пассажиры бронирования.
+-- Возвращает только ticket_no, passenger_id, passenger_name (RETURNS TABLE).
 CREATE OR REPLACE FUNCTION get_booking_passengers(
 p_book_ref text)
 RETURNS TABLE (
@@ -94,9 +110,11 @@ AS $$
 	FROM tickets AS t
 	WHERE t.book_ref::text = p_book_ref;
 $$;
--- testing
+-- Проверка:
 SELECT get_booking_tickets('RBUUIQ');
 
+-- Задание 8. get_departures(p_airport, p_start, p_end): вылеты за период.
+-- Интервал: p_start включительно, p_end не включается.
 CREATE OR REPLACE FUNCTION get_departures(
 	p_airport text,
 	p_start timestamptz,
